@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typicode</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+</head>
+<body class="mt-5 mb-5" >
+  <div class="title">
+    <h1 class="text-center">Exo Typicode </h1>
+    <hr>
+  </div>
+    <div class="container" id="app">
+      
+      <div class="top">
+        <h3>Liste des Utilisateurs</h3>
+        <p>il y a {{ countUsers }} utilisateurs inscrit dans l'application</p>
+        <select name="users" id="" v-model="userSelected" v-on:change="displayUser">
+          <option  value="">--Choisissez un utilisateur--</option>
+          <option v-for="user in users"   v-bind:value="user.id">{{ user.name }}</option>
+        </select>
+      </div>
+
+     <div-user  v-bind:user="dataUser" ></div-user>
+
+      
+    </div>
+    
+    <script src="js/vues.js"></script>
+</body>
+
+</html>
