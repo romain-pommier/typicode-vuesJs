@@ -1,6 +1,6 @@
 let liTodoTemplate = {
     template: `
-    <div v-if=" showTodo == true">
+    <div v-if=" todoStatus == true && showTodo == true">
         <li v-if="todo.completed == true" v-bind:style="{color:'green', display:'inline'}"> {{ todo.title }}  </li>
         <li v-else v-bind:style="{color:'red', display:'inline'}" > {{ todo.title }}   </li>
         <a href="#" @click="hideTodoOnClick">| Supprimer</a>
@@ -9,6 +9,7 @@ let liTodoTemplate = {
     `,
     data: function() {
         return {
+            todoStatus: true
 
         }
     },
@@ -21,7 +22,7 @@ let liTodoTemplate = {
     },
     methods: {
         hideTodoOnClick: function() {
-            this.showTodo = false
+            this.todoStatus = false
         }
 
     }
