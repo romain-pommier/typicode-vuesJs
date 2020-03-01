@@ -1,3 +1,57 @@
+let templatePhoto = {
+    template: `
+        <div v-if=" photos != null">
+            <h5 class="mb-5" >Photos de l'album '{{ albumTitle }}'</h5>
+            <div class="row">
+                <div v-for="photo in photos " class="col-md-3 mb-4">
+                    <h6 class="mb-3" > {{ photo.title }} </h6>
+                    <img v-bind:src=" photo.thumbnailUrl "></img>
+
+                </div>
+
+            </div>
+        </div>
+    `,
+    props: {
+        photos: null,
+        albumTitle: ""
+    }
+};
+let albumTemplate = {
+    template: `
+    <div  v-if="albums != null">
+        <h5> Albums photo de {{ user.name }} </h5>
+         <ul>
+            <li v-for="album in albums">{{ album.title }} <a href="#" @click="displayPictures( album.id, album.title )">| Voir les photos</a></li>
+        </ul>
+        <div-photo v-bind:photos="photos" v-bind:albumTitle="albumTitle"></div-photo>
+    </div>
+        
+    `,
+    data: function() {
+        return {
+            photos: null,
+            albumTitle: ""
+        };
+    },
+    props: {
+        albums: null,
+        user: null
+    },
+    methods: {
+        displayPictures: function(albumId, albumTitle) {
+            fetch("https://jsonplaceholder.typicode.com/photos?albumId=" + albumId)
+                .then(response => response.json())
+                .then(json => {
+                    this.photos = json;
+                    this.albumTitle = albumTitle;
+                });
+        }
+    },
+    components: {
+        "div-photo": templatePhoto
+    }
+};
 let liTodoTemplate = {
     template: `
     <div v-if=" todoStatus == true && showTodo == true">
@@ -5,28 +59,23 @@ let liTodoTemplate = {
         <li v-else v-bind:style="{color:'red', display:'inline'}" > {{ todo.title }}   </li>
         <a href="#" @click="hideTodoOnClick">| Supprimer</a>
     </div>
-    
     `,
     data: function() {
         return {
             todoStatus: true
-
-        }
+        };
     },
     props: {
         todo: null,
         showTodo: true
     },
-    computed: {
-
-    },
+    computed: {},
     methods: {
         hideTodoOnClick: function() {
-            this.todoStatus = false
+            this.todoStatus = false;
         }
-
     }
-}
+};
 
 let todoTemplate = {
     template: ` <div v-if="todos != null"> 
@@ -40,29 +89,23 @@ let todoTemplate = {
     data: function() {
         return {
             showTodo: true
-
-        }
+        };
     },
     methods: {
         hideAllTodo: function() {
-            this.showTodo = !this.showTodo
+            this.showTodo = !this.showTodo;
         }
     },
     props: {
         todos: null,
         user: null
     },
-    computed: {
-
-    },
-    filters: {
-
-    },
+    computed: {},
+    filters: {},
     components: {
-        'li-todo': liTodoTemplate
+        "li-todo": liTodoTemplate
     }
-
-}
+};
 let TemplateUser = {
     template: `<div v-if="user != null " >
                     <h4 class="mt-5" >{{ user.name }}</h4>
@@ -76,64 +119,71 @@ let TemplateUser = {
                     <p>Entreprise: {{user.company.name}}</p>
                     <hr>
                     <button @click="displayTache">Voir les tâches </button>
-                    <button>Voir les albums </button>
+                    <button @click="displayAlbum">Voir les albums </button>
                     <button>Voir les articles </button>
                     <div-todo  v-bind:todos="todoInfo" v-bind:user="user"></div-todo>
+                    <div-album v-bind:albums="albumUser" v-bind:user="user"></div-album>
+
 
                 </div>
                 `,
-
     data: function() {
         return {
-            todoInfo: null
-
-        }
+            todoInfo: null,
+            albumUser: null
+        };
     },
     computed: {
         addressComplet: function() {
-            return this.user.address.street + ', ' + this.user.address.suite + ' ' + this.user.address.city + ' ' + this.user.address.zipcode
-        },
-
+            return (
+                this.user.address.street +
+                ", " +
+                this.user.address.suite +
+                " " +
+                this.user.address.city +
+                " " +
+                this.user.address.zipcode
+            );
+        }
     },
-
-
     props: {
         user: null
     },
-
-
     methods: {
         displayTache: function() {
             fetch("https://jsonplaceholder.typicode.com/todos?userId=" + this.user.id)
                 .then(response => response.json())
                 .then(json => {
-                    this.todoInfo = json
-                })
-
+                    this.todoInfo = json;
+                });
+        },
+        displayAlbum: function() {
+            fetch(
+                    "https://jsonplaceholder.typicode.com/albums?userId=" + this.user.id
+                )
+                .then(response => response.json())
+                .then(json => {
+                    this.albumUser = json;
+                });
         }
-
     },
     components: {
-        'div-todo': todoTemplate
-    },
-
+        "div-todo": todoTemplate,
+        "div-album": albumTemplate
+    }
 };
 
 let vm = new Vue({
-    el: '#app',
+    el: "#app",
     data: {
         users: [],
-        userRoute: 'users',
+        userRoute: "users",
         dataUser: null,
         countUsers: 0,
-        userSelected: ''
-
+        userSelected: ""
     },
-
-
-
     created: function() {
-        this.getUsers()
+        this.getUsers();
     },
     methods: {
         getUsers: function() {
@@ -142,18 +192,17 @@ let vm = new Vue({
                 .then(json => {
                     this.users = json;
                     this.countUsers = json.length;
-                })
+                });
         },
         displayUser: function() {
             fetch("https://jsonplaceholder.typicode.com/users/" + this.userSelected)
                 .then(response => response.json())
                 .then(json => {
-                    this.dataUser = json
-                })
-        },
+                    this.dataUser = json;
+                });
+        }
     },
     components: {
-        'div-user': TemplateUser
+        "div-user": TemplateUser
     }
-
-})
+});
