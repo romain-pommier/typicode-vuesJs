@@ -1,3 +1,4 @@
+import testValue from "./test.js";
 let templatePhoto = {
     template: `
         <div v-if=" photos != null">
@@ -6,9 +7,7 @@ let templatePhoto = {
                 <div v-for="photo in photos " class="col-md-3 mb-4">
                     <h6 class="mb-3" > {{ photo.title }} </h6>
                     <img v-bind:src=" photo.thumbnailUrl "></img>
-
                 </div>
-
             </div>
         </div>
     `,
