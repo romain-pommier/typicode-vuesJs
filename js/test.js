@@ -1,1 +1,4 @@
-valTest = "okTest";
+
+export default{
+    name: 'test=>text'
+}

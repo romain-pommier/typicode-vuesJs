@@ -1,4 +1,4 @@
-import testValue from "./test.js";
+
 let templatePhoto = {
     template: `
         <div v-if=" photos != null">
@@ -117,19 +117,18 @@ let TemplateUser = {
                     <p style="font-style: italic;"> Adresse: {{ addressComplet }}</p>
                     <p>Entreprise: {{user.company.name}}</p>
                     <hr>
-                    <button @click="displayTache">Voir les tâches </button>
-                    <button @click="displayAlbum">Voir les albums </button>
+                    <button @click="getData('todos')">Voir les tâches </button>
+                    <button @click="getData('albums')">Voir les albums </button>
                     <button>Voir les articles </button>
-                    <div-todo  v-bind:todos="todoInfo" v-bind:user="user"></div-todo>
-                    <div-album v-bind:albums="albumUser" v-bind:user="user"></div-album>
+                    <div-todo  v-bind:todos="userData.todos" v-bind:user="user"></div-todo>
+                    <div-album v-bind:albums="userData.album" v-bind:user="user"></div-album>
 
 
                 </div>
                 `,
     data: function() {
         return {
-            todoInfo: null,
-            albumUser: null
+            userData:new Object,
         };
     },
     computed: {
@@ -149,30 +148,32 @@ let TemplateUser = {
         user: null
     },
     methods: {
-        displayTache: function() {
-            fetch("https://jsonplaceholder.typicode.com/todos?userId=" + this.user.id)
+        getData: function(value) {
+            fetch("https://jsonplaceholder.typicode.com/"+value+"?userId=" + this.user.id)
                 .then(response => response.json())
                 .then(json => {
-                    this.todoInfo = json;
+                    switch(value){
+                        case "todos":
+                            this.userData = { todos: json}
+                            break
+                        case "albums":
+                            this.userData = { album: json}
+                            break   
+                    }
                 });
         },
-        displayAlbum: function() {
-            fetch(
-                    "https://jsonplaceholder.typicode.com/albums?userId=" + this.user.id
-                )
-                .then(response => response.json())
-                .then(json => {
-                    this.albumUser = json;
-                });
-        }
     },
     components: {
         "div-todo": todoTemplate,
         "div-album": albumTemplate
+    },
+    updated: function(){
+        console.log('modifier')
     }
 };
 
-let vm = new Vue({
+let vm = new Vue(
+    {
     el: "#app",
     data: {
         users: [],
