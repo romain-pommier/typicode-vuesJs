@@ -1,5 +1,22 @@
+let postsTemplate = {
+    template : `<div v-if="posts != null">test here</div>
+    
+    `,
+    data : function(){
+        return {
 
-let templatePhoto = {
+        }
+    },
+    props: {
+        user: null,
+        posts:null
+
+    },
+    created:function(){
+        console.log(this.user)
+    }
+}
+let photoTemplate = {
     template: `
         <div v-if=" photos != null">
             <h5 class="mb-5" >Photos de l'album '{{ albumTitle }}'</h5>
@@ -48,7 +65,7 @@ let albumTemplate = {
         }
     },
     components: {
-        "div-photo": templatePhoto
+        "div-photo": photoTemplate
     }
 };
 let liTodoTemplate = {
@@ -119,9 +136,10 @@ let TemplateUser = {
                     <hr>
                     <button @click="getData('todos')">Voir les tâches </button>
                     <button @click="getData('albums')">Voir les albums </button>
-                    <button>Voir les articles </button>
+                    <button @click="getData('posts')">Voir les articles </button>
                     <div-todo  v-bind:todos="userData.todos" v-bind:user="user"></div-todo>
                     <div-album v-bind:albums="userData.album" v-bind:user="user"></div-album>
+                    <div-posts v-bind:posts="userData.posts" v-bind:user="user"></div-posts>
 
 
                 </div>
@@ -158,14 +176,18 @@ let TemplateUser = {
                             break
                         case "albums":
                             this.userData = { album: json}
-                            break   
+                            break  
+                        case "posts":
+                            this.userData = { posts: json}
+                            break 
                     }
                 });
         },
     },
     components: {
         "div-todo": todoTemplate,
-        "div-album": albumTemplate
+        "div-album": albumTemplate,
+        "div-posts": postsTemplate
     },
     updated: function(){
         console.log('modifier')
