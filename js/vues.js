@@ -1,3 +1,4 @@
+
 let postsTemplate = {
     template : `<div v-if="posts != null">test here</div>
     
@@ -33,7 +34,7 @@ let photoTemplate = {
         albumTitle: ""
     }
 };
-let albumTemplate = {
+let albumsTemplate = {
     template: `
     <div  v-if="albums != null">
         <h5> Albums photo de {{ user.name }} </h5>
@@ -138,7 +139,7 @@ let TemplateUser = {
                     <button @click="getData('albums')">Voir les albums </button>
                     <button @click="getData('posts')">Voir les articles </button>
                     <div-todo  v-bind:todos="userData.todos" v-bind:user="user"></div-todo>
-                    <div-album v-bind:albums="userData.album" v-bind:user="user"></div-album>
+                    <div-albums v-bind:albums="userData.albums" v-bind:user="user"></div-albums>
                     <div-posts v-bind:posts="userData.posts" v-bind:user="user"></div-posts>
 
 
@@ -170,23 +171,14 @@ let TemplateUser = {
             fetch("https://jsonplaceholder.typicode.com/"+value+"?userId=" + this.user.id)
                 .then(response => response.json())
                 .then(json => {
-                    switch(value){
-                        case "todos":
-                            this.userData = { todos: json}
-                            break
-                        case "albums":
-                            this.userData = { album: json}
-                            break  
-                        case "posts":
-                            this.userData = { posts: json}
-                            break 
-                    }
+                    this.userData = new Object
+                    this.userData[value] = json
                 });
         },
     },
     components: {
         "div-todo": todoTemplate,
-        "div-album": albumTemplate,
+        "div-albums": albumsTemplate,
         "div-posts": postsTemplate
     },
     updated: function(){
