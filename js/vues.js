@@ -1,4 +1,5 @@
 
+
 let postsTemplate = {
     template : `<div v-if="posts != null">test here</div>
     
